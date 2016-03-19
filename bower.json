@@ -1,0 +1,20 @@
+{
+  "name": "isfs-prototype",
+  "homepage": "https://github.com/larkintuckerllc/isfs-prototype",
+  "authors": [
+    "John Tucker <john@larkintuckerllc.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "GPL",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+  }
+}
