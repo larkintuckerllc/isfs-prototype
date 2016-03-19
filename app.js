@@ -1,12 +1,12 @@
 (function() {
   'use strict';
-  var IDLE_TIME = 1000 * 30 * 1;
-  var ANIMATION_BETWEEN = 1000 * 6;
-  var ANIMATION_DURATION = 1000 * 3;
+  var IDLE_TIME = 1000 * 60 * 5;
+  var ANIMATION_BETWEEN = 1000 * 60 * 2;
+  var ANIMATION_DURATION = 1000 * 60;
   var POSITIONS = [
-    {x: 1100, y: 1500, z: 5},
-    {x: 3834, y: 1907, z: 9},
-    {x: 1250, y: 2300, z: 9}
+    {x: 1100, y: 1500, z: 3},
+    {x: 3834, y: 1907, z: 7},
+    {x: 1250, y: 2300, z: 7}
   ];
   var thr0w = window.thr0w;
   document.addEventListener('DOMContentLoaded', ready);
