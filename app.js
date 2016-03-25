@@ -1,8 +1,8 @@
 (function() {
   'use strict';
-  var IDLE_TIME = 1000 * 60 * 5;
-  var ANIMATION_BETWEEN = 1000 * 60 * 2;
-  var ANIMATION_DURATION = 1000 * 60;
+  var IDLE_TIME = 1000 * 5;
+  var ANIMATION_BETWEEN = 1000 * 10;
+  var ANIMATION_DURATION = 1000 * 5;
   var POSITIONS = [
     {x: 1100, y: 1500, z: 3},
     {x: 3834, y: 1907, z: 7},
@@ -19,15 +19,6 @@
       var interacting = false;
       var idle = true;
       var currentPosition = 0;
-      /* DEV
-      var grid = new thr0w.Grid(
-        document.getElementById('my_frame'),
-        document.getElementById('my_content'),
-        [
-          [0]
-        ]
-      );
-      */
       var grid = new thr0w.FlexGrid(
         document.getElementById('my_frame'),
         document.getElementById('my_content'),
@@ -64,8 +55,31 @@
         document.getElementById('my_svg'),
         10
       );
-      window.setInterval(checkIdle, IDLE_TIME);
-      var animationInterval = window.setInterval(animation, ANIMATION_BETWEEN);
+      var sync = new thr0w.Sync(
+        grid,
+        'interacting',
+        message,
+        receive
+      );
+      var animationInterval;
+      if (thr0w.getChannel() === 0) {
+        animationInterval =
+          window.setInterval(animation, ANIMATION_BETWEEN);
+        window.setInterval(checkIdle, IDLE_TIME);
+      }
+      function message() {
+        return {
+          interacting: interacting,
+          idle: idle
+        };
+      }
+      function receive(data) {
+        if (!interacting && data.interacting && thr0w.getChannel() === 0) {
+          window.clearInterval(animationInterval);
+        }
+        interacting = data.interacting;
+        idle = data.idle;
+      }
       frameEl.addEventListener('touchstart', interact);
       frameEl.addEventListener('touchmove', interact);
       function checkIdle() {
@@ -74,6 +88,8 @@
           idle = true;
         }
         interacting = false;
+        sync.update();
+        sync.idle();
       }
       function animation() {
         currentPosition++;
@@ -91,7 +107,11 @@
           interacting = true;
           idle = false;
           svg.moveStop();
-          window.clearInterval(animationInterval);
+          if (thr0w.getChannel() === 0) {
+            window.clearInterval(animationInterval);
+          }
+          sync.update();
+          sync.idle();
         }
       }
     }
